@@ -341,7 +341,7 @@ weirQrange = HR.weirQ(arange)
 
 ## MAKE THE PLOT NICER BY ADJUSTING XLIM YLIM AND LEGEND
 
-plot(Qequirange,arange,main="Qequi and Qweir for HoogeRaam",
+plot(Qequirange,arange,main="Qequi (without weir) and Qweir for HoogeRaam",
      xlab="Qequi",ylab="a",lwd=3,col="blue",type="l")
 lines(weirQrange,arange,lwd=3,col="red")
 legend("bottomright", inset=.05,
@@ -368,10 +368,13 @@ Calculate for Q=1.2 the water depth at the weir and the water depth at the upstr
 ```{r, eval=FALSE}
 library(nleqslv)
 Q = 1.2
-tosolve = function(a){return (XXXX-Q)}
+#Water level far upstream
+tosolve = function(a){return (HR.Qequi(a)-Q)}
 aequi = nleqslv(1,tosolve)$x
 print(aequi)
-tosolve = function(a){return (XXXX-Q)}
+
+#Water level at the weir
+tosolve = function(a){return (HR.weirQ(a)-Q)}
 aweir = nleqslv(1.1,tosolve)$x
 print(aweir)
 ```
