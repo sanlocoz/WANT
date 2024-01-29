@@ -1946,7 +1946,7 @@ way to see the influence of the wetted cross section on the discharge is
 to investigate the relationship between <span class="math inline">\(Q\)</span> and <span class="math inline">\(a\)</span> for fixed velocities. Here is a typical
 example (it is customary to plot water depths on the vertical axis):</p>
 <pre class="r"><code>Arange =  HR.A(arange)
-vel = 0.50 #m/s
+vel = 0.50 #m/s velocity for coarse sand
 Qrange = vel*Arange
 plot(Qrange,arange,
      main=&quot;Hooge Raam Q-a relation for fixed velocity v&quot;,
@@ -1960,20 +1960,24 @@ grid(col=&quot;black&quot;)</code></pre>
 <p>Fill the chunk below (replace all XXX) with a code that combines in
 one<br />
 plot the a-Q for four realistic velocities.</p>
-<pre class="r"><code>Arange =  HR.A(arange) #--
-Q1range = XXX*Arange  #--
-Q2range=  XXX*Arange   #--
-Q3range=  XXX*Arange  #--
-Q4range = XXX*Arange     #--
-plot(Q4range,arange,   #--
+<pre class="r"><code>Arange =  HR.A(arange) #Calculating wetted area
+Q1range = 0.15*Arange  #Clay/loam/loess velocity
+Q2range=  0.20*Arange   #Sand/solid peat velocity
+Q3range=  0.30*Arange  #Coarse sand 
+Q4range = 0.60*Arange     #Fine sand/soft peat
+plot(Q4range,arange,   #Make a plot of fine sand
      main=&quot;Hooge Raam Q-a relation for fixed velocity v&quot;, #--
-     xlab=&quot;Q (m^3/s)&quot;,ylab=&quot;a (m)&quot;,col=&quot;brown&quot;,lwd=3,type=&quot;l&quot;) #--
-lines(Q3range,arange,lwd=3,col=&quot;blue&quot;) #--
-lines(Q2range,arange,lwd=3,col=&quot;red&quot;)  #--
-lines(Q1range,arange,lwd=3,col=&quot;green&quot;) #--
-legend(&quot;bottomright&quot;, inset=.05, title=&quot;v (m/s)&quot;, #--
-       c(&quot;XXX&quot;,&quot;XXX&quot;,&quot;XXX&quot;,&quot;XXX&quot;), col=c(&quot;green&quot;,&quot;red&quot;,&quot;blue&quot;,&quot;brown&quot;),lwd=3,horiz=TRUE) #--
-grid(col=&quot;black&quot;) #--</code></pre>
+     xlab=&quot;Q (m^3/s)&quot;,ylab=&quot;a (m)&quot;,col=&quot;brown&quot;,lwd=3,type=&quot;l&quot;, ylim=c(0,2), xlim = c(0,2)) #--
+lines(Q3range,arange,lwd=3,col=&quot;blue&quot;) #Adding plot of coarse sand
+lines(Q2range,arange,lwd=3,col=&quot;red&quot;)  #Adding plot of sand/solid peat
+lines(Q1range,arange,lwd=3,col=&quot;green&quot;) #Adding plot of clay/loam/loess
+
+## FIX LEGEND HERE
+#legend(&quot;bottomright&quot;, inset=c(-0.2,1.0), title=&quot;v (m/s)&quot;, #Adding the legend
+#c(&quot;clay&quot;,&quot;sand&quot;,&quot;coarse sand&quot;,&quot;fine sand&quot;), col=c(&quot;green&quot;,&quot;red&quot;,&quot;blue&quot;,&quot;brown&quot;),lwd=3,horiz=TRUE) #Color the difference scenario
+
+grid(col=&quot;black&quot;) #Making the color of the grid to be black</code></pre>
+<p><img src="start_Hooge_raam_coupling_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 </div>
 <div id="equilibrium-discharge" class="section level2">
@@ -2028,17 +2032,19 @@ wants to drain a constant intensity of 10 <span class="math inline">\(mm/day\)</
 <pre class="r"><code>area = 30 # km^2
 area = area *(1000)^2 # m^2
 I = 10 # mm /day
-I =XXXX # m/s #+ = 
+I = I/(1000*24*3600) # m/s #+ = 
 Q = I*area</code></pre>
 </div>
 <p>Now we want to calculate the water level corresponding to the
 equilibrium discharge just calculated. We can use the plot made above,
 or we can use the following chunk to find the water level corresponding
 to the calculated discharge rate.</p>
-<pre class="r"><code>library(nleqslv)
-tosolve = function(a){return (HR.Qequi(a)-Q)}
+<pre class="r"><code>library(nleqslv)</code></pre>
+<pre><code>## Warning: package &#39;nleqslv&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>tosolve = function(a){return (HR.Qequi(a)-Q)}
 aequi = nleqslv(1,tosolve)$x
 print(aequi)</code></pre>
+<pre><code>## [1] 1.177077</code></pre>
 <div class="question">
 <p>Repeat the calculation above for the rainfall intensities between 0.5
 mm and 15 mm and make a plot of the water depths vs these
