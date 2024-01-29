@@ -87,6 +87,7 @@ Weir: crest width 2.0 m, crest height: 11.45 and 12.60 m.
 Influx stationary upstream based on base flow as discharge of an upstream area of 250 ha (assume a discharge of 0.5 l/s/ha).
 
 ```{r}
+#Geert adds a small test comment
 rm(list = ls())
 HR.Qin = 250*0.005  #250ha * 0.5 l/s/ha
 cat('Total influx upstream : ',HR.Qin)
