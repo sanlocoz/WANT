@@ -207,11 +207,13 @@ lines(Q3range,arange,lwd=3,col="blue") #Adding plot of coarse sand
 lines(Q2range,arange,lwd=3,col="red")  #Adding plot of sand/solid peat
 lines(Q1range,arange,lwd=3,col="green") #Adding plot of clay/loam/loess
 
+#new comment by Geert
 ## FIX LEGEND HERE
 #legend("bottomright", inset=c(-0.2,1.0), title="v (m/s)", #Adding the legend
 #c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #Color the difference scenario
 
 grid(col="black") #Making the color of the grid to be black
+
 
 ```
 </div>
