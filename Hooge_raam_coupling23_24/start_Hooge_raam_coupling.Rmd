@@ -204,8 +204,9 @@ plot(Q4range,arange,   #--
 lines(Q3range,arange,lwd=3,col="blue") #--
 lines(Q2range,arange,lwd=3,col="red")  #--
 lines(Q1range,arange,lwd=3,col="green") #--
-legend("bottomright", inset=.05, title="v (m/s)", #--
-c("0.15","0.20","0.30","0.60"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #--
+## FIX LEGEND HERE
+#legend("bottomright", inset=c(-0.2,1.0), title="v (m/s)", #--
+#c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #--
 grid(col="black") #--
 
 ```
@@ -262,7 +263,7 @@ Step1: calculate the discharge through the river.
 area = 30 # km^2
 area = area *(1000)^2 # m^2
 I = 10 # mm /day
-I = I # m/s #+ = 
+I = I/(1000*24*3600) # m/s #+ = 
 Q = I*area
 ```
 </div>
