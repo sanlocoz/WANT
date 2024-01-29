@@ -200,12 +200,12 @@ Q3range=  0.30*Arange  #--
 Q4range = 0.60*Arange     #--
 plot(Q4range,arange,   #--
      main="Hooge Raam Q-a relation for fixed velocity v", #--
-     xlab="Q (m^3/s)",ylab="a (m)",col="brown",lwd=3,type="l", ylim=c(-2,2)) #--
+     xlab="Q (m^3/s)",ylab="a (m)",col="brown",lwd=3,type="l", ylim=c(0,2), xlim = c(0,2)) #--
 lines(Q3range,arange,lwd=3,col="blue") #--
 lines(Q2range,arange,lwd=3,col="red")  #--
 lines(Q1range,arange,lwd=3,col="green") #--
-#legend("bottomright", inset=.05, title="v (m/s)", #--
-#       c("0.15","0.20","0.30","0.60"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #--
+legend("bottomright", inset=.05, title="v (m/s)", #--
+c("0.15","0.20","0.30","0.60"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #--
 grid(col="black") #--
 
 ```
@@ -262,7 +262,7 @@ Step1: calculate the discharge through the river.
 area = 30 # km^2
 area = area *(1000)^2 # m^2
 I = 10 # mm /day
-I =XXXX # m/s #+ = 
+I = I # m/s #+ = 
 Q = I*area
 ```
 </div>
