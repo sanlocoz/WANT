@@ -175,7 +175,7 @@ As can be seen in the function above that the wetted cross section is dependent 
 
 ```{r, eval=TRUE}
 Arange =  HR.A(arange)
-vel = 0.50 #m/s
+vel = 0.50 #m/s velocity for coarse sand
 Qrange = vel*Arange
 plot(Qrange,arange,
      main="Hooge Raam Q-a relation for fixed velocity v",
@@ -193,21 +193,23 @@ Fill the chunk below (replace all XXX) with a code that combines in one\
 plot the a-Q for four realistic velocities.
 
 ```{r, eval=FALSE}
-Arange =  HR.A(arange) #--
-Q1range = 0.15*Arange  #--
-Q2range=  0.20*Arange   #--
-Q3range=  0.30*Arange  #--
-Q4range = 0.60*Arange     #--
-plot(Q4range,arange,   #--
+Arange =  HR.A(arange) #Calculating wetted area
+Q1range = 0.15*Arange  #Clay/loam/loess velocity
+Q2range=  0.20*Arange   #Sand/solid peat velocity
+Q3range=  0.30*Arange  #Coarse sand 
+Q4range = 0.60*Arange     #Fine sand/soft peat
+plot(Q4range,arange,   #Make a plot of fine sand
      main="Hooge Raam Q-a relation for fixed velocity v", #--
      xlab="Q (m^3/s)",ylab="a (m)",col="brown",lwd=3,type="l", ylim=c(0,2), xlim = c(0,2)) #--
-lines(Q3range,arange,lwd=3,col="blue") #--
-lines(Q2range,arange,lwd=3,col="red")  #--
-lines(Q1range,arange,lwd=3,col="green") #--
+lines(Q3range,arange,lwd=3,col="blue") #Adding plot of coarse sand
+lines(Q2range,arange,lwd=3,col="red")  #Adding plot of sand/solid peat
+lines(Q1range,arange,lwd=3,col="green") #Adding plot of clay/loam/loess
+
 ## FIX LEGEND HERE
-#legend("bottomright", inset=c(-0.2,1.0), title="v (m/s)", #--
-#c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #--
-grid(col="black") #--
+#legend("bottomright", inset=c(-0.2,1.0), title="v (m/s)", #Adding the legend
+#c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #Color the difference scenario
+
+grid(col="black") #Making the color of the grid to be black
 
 ```
 </div>
