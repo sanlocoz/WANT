@@ -1,13 +1,15 @@
 ---
 title: "Hooge Raam open water with groundwater interactions"
 output:
+  pdf_document:
+    toc: yes
+  html_notebook:
+    toc: yes
+    css: want_n.css
   html_document:
     toc: yes
     css: want_n.css
     df_print: paged
-  html_notebook:
-    toc: yes
-    css: want_n.css
 ---
 
 # Introduction
@@ -281,7 +283,7 @@ aequi = nleqslv(1,tosolve)$x
 print(aequi)
 ```
 <div class="question">
-Repeat the calculation above for the rainfall intensities between 0.5 mm and 15 mm and make a plot of the water depths vs these intensities.
+Repeat the calculation above for the rainfall intensities between 0.5 mm/day and 15 mm/day and make a plot of the water depths vs these intensities.
 
 ```{r eval=FALSE}
 Is = seq(0.5,15,length=100)
@@ -293,7 +295,7 @@ for( i in 1:length(Is))
   tosolve = function(a){return (HR.Qequi(a)-Q)}
   aequis[i] = nleqslv(1,tosolve)$x
 }
-plot(Is,aequis,type="l",col="blue",lwd=3)
+plot(Is,aequis,type="l",col="blue",lwd=3, main="Water Depth for Different Rain Intensities", xlab = "Rainfall intensity (mm/day)", ylab = "Steady state water level (m)")
 grid(col="black")
 ```
 </div>
@@ -332,10 +334,12 @@ Finish the code below such that the function calculates discharges according to 
 HR.weirQ = function(a)
 {
   a[a<HR.weir.crest] = HR.weir.crest
-  return(XXXX)
+  return(1.83*HR.weir.width*(a-HR.weir.crest)^(3/2))
 }
 
 weirQrange = HR.weirQ(arange)
+
+## MAKE THE PLOT NICER BY ADJUSTING XLIM YLIM AND LEGEND
 
 plot(Qequirange,arange,main="Qequi and Qweir for HoogeRaam",
      xlab="Qequi",ylab="a",lwd=3,col="blue",type="l")

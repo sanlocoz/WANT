@@ -2047,18 +2047,18 @@ print(aequi)</code></pre>
 <pre><code>## [1] 1.177077</code></pre>
 <div class="question">
 <p>Repeat the calculation above for the rainfall intensities between 0.5
-mm and 15 mm and make a plot of the water depths vs these
+mm/day and 15 mm/day and make a plot of the water depths vs these
 intensities.</p>
 <pre class="r"><code>Is = seq(0.5,15,length=100)
 aequis = c()
 for( i in 1:length(Is))
 {
-  I = Is[i]/XXXX
+  I = Is[i]/(3600*24*1000)
   Q = I*area                
   tosolve = function(a){return (HR.Qequi(a)-Q)}
   aequis[i] = nleqslv(1,tosolve)$x
 }
-plot(Is,aequis,type=&quot;l&quot;,col=&quot;blue&quot;,lwd=3)
+plot(Is,aequis,type=&quot;l&quot;,col=&quot;blue&quot;,lwd=3, main=&quot;Water Depth for Different Rain Intensities&quot;, xlab = &quot;Rainfall intensity (mm/day)&quot;, ylab = &quot;Steady state water level (m)&quot;)
 grid(col=&quot;black&quot;)</code></pre>
 </div>
 </div>
