@@ -285,7 +285,7 @@ print(aequi)
 <div class="question">
 Repeat the calculation above for the rainfall intensities between 0.5 mm/day and 15 mm/day and make a plot of the water depths vs these intensities.
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 Is = seq(0.5,15,length=100)
 aequis = c()
 for( i in 1:length(Is))
@@ -330,7 +330,7 @@ The amount of water flowing over a weir is a function of the water height above 
 <div class="question">
 Finish the code below such that the function calculates discharges according to the formula above.
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 HR.weirQ = function(a)
 {
   a[a<HR.weir.crest] = HR.weir.crest
@@ -365,7 +365,7 @@ In between the water levels will vary between these two. Here we first are going
 <div class="question">
 Calculate for Q=1.2 the water depth at the weir and the water depth at the upstream end
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(nleqslv)
 Q = 1.2
 #Water level far upstream
@@ -384,13 +384,16 @@ print(aweir)
 <div class="question">
 Make a function for the rough linear approximation and plot it
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 HR.bwrough = approxfun(HR.domain,
-                       c(HR.botelev.upstream+XXXX,HR.botelev.dnstream+XXXX),rule=2) #% aequi #% aweir
-plot(HR.domain,HR.bwrough(HR.domain),ylim=c(HR.botelev.dnstream,HR.botelev.upstream+aequi),
+                       c(HR.botelev.upstream+aequi,HR.botelev.downstream+aweir),rule=2) #% aequi #% aweir
+plot(HR.domain,HR.bwrough(HR.domain),ylim=c(HR.botelev.downstream,HR.botelev.upstream+aequi),
      main=paste("rough level approx for Q=",Q),
      xlab="l (m)",ylab="h (m)",col="blue",lwd=4,type="l")
+
 lines(HR.domain,HR.zb(HR.domain),col="brown",lwd=4)
+
+#Add legend, blue is water elevation and brown is river bed elevation
 ```
 </div>  
 
@@ -418,10 +421,11 @@ For the Hooge Raam, a function for the bottom was already given: **HR.zb** (see 
 <div class="question">
 Finish the function definition below:  
 
-```{r eval = FALSE}
-HR.a = function(x,XXXX)
+```{r eval =TRUE}
+#CHECK THIS TRUE OR NOT
+HR.a = function(x,h)
 {
-  return(XXXX-HR.zb(x)) #
+  return(h-HR.zb(x)) #
 }
 ```
 </div>  
