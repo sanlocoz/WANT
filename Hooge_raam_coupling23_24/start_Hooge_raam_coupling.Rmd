@@ -621,7 +621,7 @@ The stationary situation is based on the average yearly recharge; about 0.8 $mm/
 <div class="question">
 Finish the functions in the chunck below (replace XXXX, YYYY)
 
-```{r eval = FALSE}
+```{r eval = TRUE}
 L = 125 # average ditch distance in m
 
 H_drainage = (HR.botelev.upstream + HR.botelev.downstream)/2 + 0.2
