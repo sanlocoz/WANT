@@ -201,16 +201,14 @@ Q2range=  0.20*Arange   #Sand/solid peat velocity
 Q3range=  0.30*Arange  #Coarse sand 
 Q4range = 0.60*Arange     #Fine sand/soft peat
 plot(Q4range,arange,   #Make a plot of fine sand
-     main="Hooge Raam Q-a relation for fixed velocity v", #--
-     xlab="Q (m^3/s)",ylab="a (m)",col="brown",lwd=3,type="l", ylim=c(0,2), xlim = c(0,2)) #--
+     main="Hooge Raam Q-a relation for fixed velocity v", #Title
+     xlab=expression(Q~(m^3/s)),ylab="a (m)",col="brown",lwd=3,type="l", ylim=c(0,1.5), xlim = c(0,2)) #Settings for plot
 lines(Q3range,arange,lwd=3,col="blue") #Adding plot of coarse sand
 lines(Q2range,arange,lwd=3,col="red")  #Adding plot of sand/solid peat
 lines(Q1range,arange,lwd=3,col="green") #Adding plot of clay/loam/loess
 
-# Can is also push and pull from R studio or only via Github
-## FIX LEGEND HERE
-#legend("bottomright", inset=c(-0.2,1.0), title="v (m/s)", #Adding the legend
-#c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) #Color the difference scenario
+legend("bottomright", inset=c(0.001), title="v (m/s)", #Adding the legend
+c("clay, 0.15","sand, 0.20","coarse sand, 0.30","fine sand, 0.60"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE, cex = 0.6) #Color the difference scenario
 
 grid(col="black") #Making the color of the grid to be black
 
