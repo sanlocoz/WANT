@@ -774,7 +774,7 @@ GW.Q.trans = c()
 GW.H.trans = c()
 
 #using the stationary head of the stationary model for the initial head for the first time step for the transient model
-old.state = state.fun(GW.stat)
+old.state = state.fun(GW.trans) # first initial old state to be used in the while loop.
 
 #time aspects
 delt.t = 1/24 # 1 hour
@@ -812,6 +812,7 @@ while (current.time < end.time)
        legend=c("runoff","storage_2flow","storage_2storage","precipitation","drainage"), col=c("red","yellow4","orange","blue","green"),
        lwd=3,horiz=FALSE)
 #first 2 days 2*24 = 48 row
+  
   plot(GW.Q.trans$time[1:48],GW.Q.trans$surface_runoff[1:48],ylim = Q.range, type = "o", col = "red",lwd =2,
        ylab = "flux rates in m2/d", xlab = "time in days", main = "flux rates groundwater model")
   lines(GW.Q.trans$time[1:48],GW.Q.trans$storage_2flow[1:48],col="yellow4",lwd = 2)
@@ -819,7 +820,7 @@ while (current.time < end.time)
   lines(GW.Q.trans$time[1:48],GW.Q.trans$precip[1:48],col="blue", lwd = 2)
   lines(GW.Q.trans$time[1:48],GW.Q.trans$boundary[1:48],col="green", lwd = 2)
   legend("topright", inset=.05,
-       legend=c("runoff","storage_2flow","storage_2storage","precipitation","drainage"), col=c("red","yellow4","orange","blue","green"),
+       legend=c("runoff","flow over (saturated)storage","flow to (unsaturated) storage","precipitation","drainage"), col=c("red","yellow4","orange","blue","green"),
        lwd=3,horiz=FALSE)
 grid()  
 
