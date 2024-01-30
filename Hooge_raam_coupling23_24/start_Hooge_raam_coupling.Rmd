@@ -560,7 +560,7 @@ All the approaches only considered the Hooge Raam as a transport river: water co
 
 A proper value for this number should come from a groundwater model. For an example value here we just take 50% of the inflow upstream as a total, that has to be distributed over the length of the river.
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 HR.lateraldrainage = 0.5*HR.Qin/HR.length
 add.spatialflux(HR.backwatermodel,rate="HR.lateraldrainage",name="drainage")
 
