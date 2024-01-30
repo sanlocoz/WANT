@@ -423,7 +423,6 @@ For the Hooge Raam, a function for the bottom was already given: **HR.zb** (see 
 Finish the function definition below:  
 
 ```{r eval =TRUE}
-#CHECK THIS TRUE OR NOT
 HR.a = function(x,h)
 {
   return(h-HR.zb(x)) #
@@ -858,7 +857,7 @@ Determine the properly scaled drainage and runoff for the Hooge Raam model ; `HR
 ## from groundwater discharge to lateral inflow into the Hooge Raam open water model
 HR.discharge.area = 500 * 10^4#in m2
 day2sec = 86400 #from day to seconds
-m2.day.to.m3.day =   HR.discharge.area/L #from m2/day to m3/day; a "diffuse length" based on the total drained area divided by the L(ditch distance); unit is m because it is used to conver m2/day to m3/day
+m2.day.to.m3.day =   HR.discharge.area/L #from m2/day to m3/day; a "diffuse length" based on the total drained area divided by the L(ditch distance); unit is m because it is used to convert m2/day to m3/day
 
 Q.drainage.m3.d = GW.Q.trans$boundary * m2.day.to.m3.day # Total drainage in the catchment
 Q.drainage.m3.s = Q.drainage.m3.d/day2sec# Total drainage in the catchment
