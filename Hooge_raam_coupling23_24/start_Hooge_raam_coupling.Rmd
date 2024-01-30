@@ -12,7 +12,7 @@ output:
     toc: yes
 ---
 
-# Introduction change in ikhsan branch
+# Introduction change
 
 
 With this final assignment both an open water model and a groundwater model will be developed which will be coupled.  
@@ -635,9 +635,9 @@ C_ditch = 3 #d entrance resistance of the ditches
 
 Ditch.bc = function(state)
 {
-  if(state > XXXX)
+  if(state > H_drainage)
   {
-  return((XXXX - state)/YYYY)
+  return((H_drainage - state)/C_ditch)
   }
   else
   {
@@ -647,14 +647,14 @@ Ditch.bc = function(state)
 
 Q.gw = function(x,state,gradstate)
 {
-  return(-XXXX * YYYY)
+  return(-GW.kD * gradstate)
 }
 
 Q.srfc = function(x,state)
 {
-  if(state > XXXX) 
+  if(state > H_surface) 
   {
-  surface.runoff = (state - XXXX)/YYYY
+  surface.runoff = (state - H_surface)/C_surface
   return(-surface.runoff)
   }
   else
