@@ -1419,15 +1419,15 @@ names = names(base)
 
 for(i in (1:length(base)))
 {
-  base.current = as.numeric(base[i])
-  scale.current = as.numeric(scale[i])
+  base.current = as.numeric(base[i]) #base value of parameter[i]
+  scale.current = as.numeric(scale[i]) #scale of variation in terms of standard deviation of parameter[i]
   eps = 1/100*scale.current #we take epsilon as 1% of the scale of variation (standard deviation)
   
-  name = names[i]
+  name = names[i] #variables that we want to change
   
-  assign(name, base.current+eps, envir = .GlobalEnv)
-  Sensitivity.loop()
-  assign(name, base.current, envir = .GlobalEnv)
+  assign(name, base.current+eps, envir = .GlobalEnv) #assigning name to base+eps
+  Sensitivity.loop() #running the coupling model
+  assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
   #print(get(name, envir = .GlobalEnv))
   print(MRESULT())
 
