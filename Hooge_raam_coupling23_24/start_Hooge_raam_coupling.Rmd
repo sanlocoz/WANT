@@ -277,6 +277,7 @@ Q = I*area
 Now we want to calculate the water level corresponding to the equilibrium discharge just calculated. We can use the plot made above, or we can use the following chunk to find the water level corresponding to the calculated discharge rate.
 
 ```{r, eval=TRUE}
+#install.packages("nleqslv")
 library(nleqslv)
 tosolve = function(a){return (HR.Qequi(a)-Q)}
 aequi = nleqslv(1,tosolve)$x
@@ -342,7 +343,7 @@ weirQrange = HR.weirQ(arange)
 ## MAKE THE PLOT NICER BY ADJUSTING XLIM YLIM AND LEGEND
 
 plot(Qequirange,arange,main="Qequi (without weir) and Qweir for HoogeRaam",
-     xlab="Qequi",ylab="a",lwd=3,col="blue",type="l")
+     xlab="Qequi",ylab="a",lwd=3,col="blue",type="l", ylim = c(0,1.5))
 lines(weirQrange,arange,lwd=3,col="red")
 legend("bottomright", inset=.05,
        c("Qequiriver","Qweir"), col=c("blue","red"),lwd=3,horiz=FALSE)
@@ -948,7 +949,7 @@ Total_{out} = \left \{ \sum_{t=0}^{t=T} Qsto(t)+\sum_{t=0}^{t=T} Runoff(t) + \su
 $$
 Recall that the water balance of the groundwater model is expressed in $m^2/d$. To come to volumes ($m^3$) one need to consider the "diffuse length" and the time step.
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 # Water volumes for the 1D groundwater model during the total simulation time
 
 GW.volume.drainage = sum(GW.Q.trans$boundary) * m2.day.to.m3.day * delt.t
@@ -976,7 +977,7 @@ Total_{in} = \sum_{t=0}^{t=T} boundary_{upstream}\Delta t + \sum_{t=0}^{t=T} run
 Total_{out} = \sum_{t=0}^{t=T} boundary_{downstream}
 $$
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 # water volumes for the 1D open water (Hooge Raam) model during the total simulation time
 HR.volume.bnd.upstream = sum(HR.Q.trans$boundary_upstream) * delt.t * 86400 #unit delt.t is in days!
 HR.volume.runoff = sum(HR.Q.trans$runoff) * delt.t * 86400
@@ -1001,7 +1002,7 @@ Check whether the output of the groundwater are the same inputs for the open wat
 
 It can be interesting to for example compare time series for the precipitation and discharge of the Hooge Raam. With this, one can examine the response of a storm event on the open water - groundwater system.
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 plot(GW.Q.trans$time, P.pattern(GW.Q.trans$time), col = "blue", lwd =2, ylab = "m/d",xlab = "days",type= "l", main = "Transient fluxes open water model in m/d", sub = "Total simulation time")
 HR.discharge.m.d = HR.Q.trans$boundary_downstream * 86400 / HR.discharge.area
 lines(HR.Q.trans$time,HR.discharge.m.d,col = "red", lwd =2)
@@ -1027,7 +1028,7 @@ abline(v=time.max.drainage, col = "green")
 ```
 Zooming in for the first two days.
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 plot.time = GW.Q.trans$time[1:48]
 plot(plot.time, P.pattern(plot.time), col = "blue", lwd =2, ylab = "m/d",xlab = "days",type= "o", main = "Transient fluxes open water model in m/d", sub = "First two days simulation time")
 HR.discharge.m.d = HR.Q.trans$boundary_downstream * 86400 / HR.discharge.area
