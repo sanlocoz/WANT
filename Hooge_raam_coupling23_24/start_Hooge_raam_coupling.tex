@@ -444,6 +444,7 @@ plot the a-Q for four realistic velocities.
 \FunctionTok{lines}\NormalTok{(Q2range,arange,}\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}\AttributeTok{col=}\StringTok{"red"}\NormalTok{)  }\CommentTok{\#Adding plot of sand/solid peat}
 \FunctionTok{lines}\NormalTok{(Q1range,arange,}\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}\AttributeTok{col=}\StringTok{"green"}\NormalTok{) }\CommentTok{\#Adding plot of clay/loam/loess}
 
+\CommentTok{\# Can is also push and pull from R studio or only via Github}
 \DocumentationTok{\#\# FIX LEGEND HERE}
 \CommentTok{\#legend("bottomright", inset=c({-}0.2,1.0), title="v (m/s)", \#Adding the legend}
 \CommentTok{\#c("clay","sand","coarse sand","fine sand"), col=c("green","red","blue","brown"),lwd=3,horiz=TRUE) \#Color the difference scenario}
@@ -572,6 +573,8 @@ intensities.
 \end{Highlighting}
 \end{Shaded}
 
+\includegraphics{start_Hooge_raam_coupling_files/figure-latex/unnamed-chunk-12-1.pdf}
+
 \hypertarget{the-downstream-weir}{%
 \section{The downstream weir}\label{the-downstream-weir}}
 
@@ -614,12 +617,14 @@ according to the formula above.
 \NormalTok{HR.weirQ }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(a)}
 \NormalTok{\{}
 \NormalTok{  a[a}\SpecialCharTok{\textless{}}\NormalTok{HR.weir.crest] }\OtherTok{=}\NormalTok{ HR.weir.crest}
-  \FunctionTok{return}\NormalTok{(XXXX)}
+  \FunctionTok{return}\NormalTok{(}\FloatTok{1.83}\SpecialCharTok{*}\NormalTok{HR.weir.width}\SpecialCharTok{*}\NormalTok{(a}\SpecialCharTok{{-}}\NormalTok{HR.weir.crest)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{3}\SpecialCharTok{/}\DecValTok{2}\NormalTok{))}
 \NormalTok{\}}
 
 \NormalTok{weirQrange }\OtherTok{=} \FunctionTok{HR.weirQ}\NormalTok{(arange)}
 
-\FunctionTok{plot}\NormalTok{(Qequirange,arange,}\AttributeTok{main=}\StringTok{"Qequi and Qweir for HoogeRaam"}\NormalTok{,}
+\DocumentationTok{\#\# MAKE THE PLOT NICER BY ADJUSTING XLIM YLIM AND LEGEND}
+
+\FunctionTok{plot}\NormalTok{(Qequirange,arange,}\AttributeTok{main=}\StringTok{"Qequi (without weir) and Qweir for HoogeRaam"}\NormalTok{,}
      \AttributeTok{xlab=}\StringTok{"Qequi"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"a"}\NormalTok{,}\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{type=}\StringTok{"l"}\NormalTok{)}
 \FunctionTok{lines}\NormalTok{(weirQrange,arange,}\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
 \FunctionTok{legend}\NormalTok{(}\StringTok{"bottomright"}\NormalTok{, }\AttributeTok{inset=}\NormalTok{.}\DecValTok{05}\NormalTok{,}
@@ -627,6 +632,8 @@ according to the formula above.
 \FunctionTok{grid}\NormalTok{(}\AttributeTok{col=}\StringTok{"black"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{start_Hooge_raam_coupling_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \hypertarget{rough-backwater-approximation}{%
 \section{Rough backwater
@@ -653,25 +660,49 @@ the upstream end
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(nleqslv)}
 \NormalTok{Q }\OtherTok{=} \FloatTok{1.2}
-\NormalTok{tosolve }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(a)\{}\FunctionTok{return}\NormalTok{ (XXXX}\SpecialCharTok{{-}}\NormalTok{Q)\}}
+\CommentTok{\#Water level far upstream}
+\NormalTok{tosolve }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(a)\{}\FunctionTok{return}\NormalTok{ (}\FunctionTok{HR.Qequi}\NormalTok{(a)}\SpecialCharTok{{-}}\NormalTok{Q)\}}
 \NormalTok{aequi }\OtherTok{=} \FunctionTok{nleqslv}\NormalTok{(}\DecValTok{1}\NormalTok{,tosolve)}\SpecialCharTok{$}\NormalTok{x}
 \FunctionTok{print}\NormalTok{(aequi)}
-\NormalTok{tosolve }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(a)\{}\FunctionTok{return}\NormalTok{ (XXXX}\SpecialCharTok{{-}}\NormalTok{Q)\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.675549
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Water level at the weir}
+\NormalTok{tosolve }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(a)\{}\FunctionTok{return}\NormalTok{ (}\FunctionTok{HR.weirQ}\NormalTok{(a)}\SpecialCharTok{{-}}\NormalTok{Q)\}}
 \NormalTok{aweir }\OtherTok{=} \FunctionTok{nleqslv}\NormalTok{(}\FloatTok{1.1}\NormalTok{,tosolve)}\SpecialCharTok{$}\NormalTok{x}
 \FunctionTok{print}\NormalTok{(aweir)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## [1] 1.439574
+\end{verbatim}
 
 Make a function for the rough linear approximation and plot it
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{HR.bwrough }\OtherTok{=} \FunctionTok{approxfun}\NormalTok{(HR.domain,}
-                       \FunctionTok{c}\NormalTok{(HR.botelev.upstream}\SpecialCharTok{+}\NormalTok{XXXX,HR.botelev.dnstream}\SpecialCharTok{+}\NormalTok{XXXX),}\AttributeTok{rule=}\DecValTok{2}\NormalTok{) }\CommentTok{\#\% aequi \#\% aweir}
-\FunctionTok{plot}\NormalTok{(HR.domain,}\FunctionTok{HR.bwrough}\NormalTok{(HR.domain),}\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(HR.botelev.dnstream,HR.botelev.upstream}\SpecialCharTok{+}\NormalTok{aequi),}
+                       \FunctionTok{c}\NormalTok{(HR.botelev.upstream}\SpecialCharTok{+}\NormalTok{aequi,HR.botelev.downstream}\SpecialCharTok{+}\NormalTok{aweir),}\AttributeTok{rule=}\DecValTok{2}\NormalTok{) }\CommentTok{\#\% aequi \#\% aweir}
+\FunctionTok{plot}\NormalTok{(HR.domain,}\FunctionTok{HR.bwrough}\NormalTok{(HR.domain),}\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(HR.botelev.downstream,HR.botelev.upstream}\SpecialCharTok{+}\NormalTok{aequi),}
      \AttributeTok{main=}\FunctionTok{paste}\NormalTok{(}\StringTok{"rough level approx for Q="}\NormalTok{,Q),}
      \AttributeTok{xlab=}\StringTok{"l (m)"}\NormalTok{,}\AttributeTok{ylab=}\StringTok{"h (m)"}\NormalTok{,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}\AttributeTok{lwd=}\DecValTok{4}\NormalTok{,}\AttributeTok{type=}\StringTok{"l"}\NormalTok{)}
+
 \FunctionTok{lines}\NormalTok{(HR.domain,}\FunctionTok{HR.zb}\NormalTok{(HR.domain),}\AttributeTok{col=}\StringTok{"brown"}\NormalTok{,}\AttributeTok{lwd=}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{start_Hooge_raam_coupling_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Add legend, blue is water elevation and brown is river bed elevation}
 \end{Highlighting}
 \end{Shaded}
 
@@ -716,9 +747,10 @@ Finish the function definition below:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{HR.a }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(x,XXXX)}
+\CommentTok{\#CHECK THIS TRUE OR NOT}
+\NormalTok{HR.a }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(x,h)}
 \NormalTok{\{}
-  \FunctionTok{return}\NormalTok{(XXXX}\SpecialCharTok{{-}}\FunctionTok{HR.zb}\NormalTok{(x)) }\CommentTok{\#}
+  \FunctionTok{return}\NormalTok{(h}\SpecialCharTok{{-}}\FunctionTok{HR.zb}\NormalTok{(x)) }\CommentTok{\#}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
