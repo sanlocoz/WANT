@@ -724,14 +724,15 @@ Since the time derivative is $\frac{\partial H}{\partial t} \approx \frac {H^{t+
 <div class="question">
 Finish the Q.sto function (replace XXXX, YYYY)
 
-```{r eval = FALSE}
+```{r eval = TRUE}
 old.state = state.fun(model = GW.stat) #a FUNCTION (!) to save the previous state of the model, so H at t= t to calculate the new H at t = t + delt.t .
 GW.S = 0.05
 Q.sto = function(x,state)
 {
-  Storage.flux = - GW.S * (state - XXXX(YYYY))/delt.t
+  Storage.flux = - GW.S * (state - old.state(x))/delt.t
   return(Storage.flux)
 }
+
 ```
 </div>
 
@@ -741,7 +742,7 @@ Q.sto = function(x,state)
 
 The transient model is the same as the stationary model with the addition of the storage flux.
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 GW.trans = copy.model(GW.stat)
 add.spatialflux(model = GW.trans,rate = Q.sto,name = "storage")
 summary(GW.trans)
