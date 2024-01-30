@@ -784,7 +784,7 @@ current.time = start.time
 while (current.time < end.time)
 {
   current.time = current.time + delt.t
-  P = P.pattern(current.time) #precipitatin during the storm 
+  P = P.pattern(current.time) #precipitation during the storm 
   solve.steps(GW.trans)
   #save intermediate data
   wb = dataframe.balance(GW.trans)
