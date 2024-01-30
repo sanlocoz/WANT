@@ -1,15 +1,15 @@
 ---
 title: "Hooge Raam open water with groundwater interactions"
 output:
-  pdf_document:
-    toc: yes
-  html_notebook:
-    toc: yes
-    css: want_n.css
   html_document:
     toc: yes
     css: want_n.css
     df_print: paged
+  html_notebook:
+    toc: yes
+    css: want_n.css
+  pdf_document:
+    toc: yes
 ---
 
 # Introduction
@@ -496,7 +496,7 @@ HR.Q= function(x,state,gradstate)
 
 ## Model 1: the Hooge Raam base model
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 HR.backwatermodel = newFLOW1D(domain=HR.domain,systemfluxfunction = HR.Q,
                               name = 'Hooge Raam backwater')
 
@@ -534,14 +534,14 @@ Discuss:
 </div>    
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 solve.steps(HR.backwatermodel)
 plot(HR.backwatermodel,fluxplot=TRUE)
 ```
 
 And a nice plot to compare the rough (linear) approximation with the smooth one:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 plot(HR.domain,HR.bwrough(HR.domain),ylim=c(HR.botelev.downstream,HR.botelev.upstream+aequi),
      main=paste("Backwater curve for Q=",HR.Qin),
      xlab="l (m)",ylab="h (m)",col="green",lty=2,lwd=4,type="l")
