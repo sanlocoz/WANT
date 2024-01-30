@@ -674,7 +674,6 @@ Finish the code in the chunk below (replace XXXX)
 You may chose which type of discretisation you want to use (FE, FV etc.)
 
 ```{r eval = TRUE}
-#Test comment by Geert
 GW.domain = c(0,L)
 GW.nodes = seq(GW.domain[1],GW.domain[2],length.out =40)
 GW.stat = newFLOW1D(domain = GW.domain,systemfluxfunction = Q.gw, name = "groundwater model")
