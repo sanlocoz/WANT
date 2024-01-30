@@ -680,9 +680,9 @@ GW.stat = newFLOW1D(domain = GW.domain,systemfluxfunction = Q.gw, name = "ground
 add.spatialflux(model = GW.stat,rate = "P",name = "precipitation" )
 add.spatialflux(model = GW.stat,rate = Q.srfc,name = "surface_runoff")
 
-set.discretisation(model = GW.stat,GW.nodes,method = YYYY)
-set.BC.fluxstate(model = GW.stat,where = "left",func = XXXX)
-set.BC.fluxstate(model = GW.stat, where = "right",func = XXXX)
+set.discretisation(model = GW.stat,GW.nodes,method = "FE")
+set.BC.fluxstate(model = GW.stat,where = "left",func = Ditch.bc)
+set.BC.fluxstate(model = GW.stat, where = "right",func = Ditch.bc)
 
 do.initialize(model = GW.stat,H_surface)
 summary(GW.stat)
