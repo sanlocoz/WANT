@@ -879,7 +879,7 @@ Q.runoff.m2.s = Q.runoff.m3.s/HR.length # Runoff per m river
 Closely inspect the following chunk running the open water model `HR.backwatermodel` with drainage and surface fluxes coming from the groundwater model.  
 </div>
 
-```{r eval= FALSE, animation1,  fig.show='animate', aniopts=c('controls','loop'), interval=0.1}
+```{r eval= TRUE, animation1,  fig.show='animate', aniopts=c('controls','loop'), interval=0.1}
 
 ####preparing open water model for drainage and surface runoff
 summary(HR.backwatermodel)
