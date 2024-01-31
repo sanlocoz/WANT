@@ -751,11 +751,14 @@ summary(GW.trans)
 The storm event is simulated within one day (24 hours) with a max of 360 mm/d during one hour half way this day.
 
 ```{r}
-P.pattern.rate = c(0.0008,0.015*24*(sin(pi*rep(1/24*(1:24)))),0.0008)
-P.pattern.date = c(0,rep(1/24*(1:24)),(1+1/24))
+Pattern.maximum.rate = 0.015*24
+Pattern.storm.length = 24 #hours
+
+P.pattern.rate = c(0.0008,Pattern.maximum.rate*(sin(pi*rep(1/24*(1:Pattern.storm.length)))),0.0008)
+P.pattern.date = c(0,rep(1/24*(1:Pattern.storm.length)),((Pattern.storm.length+1)/24))
 P.pattern = approxfun(P.pattern.date,P.pattern.rate,rule = 2)
 plot(P.pattern.date,P.pattern(P.pattern.date),type="l",col = "blue",
-     lwd = 2, xlab = "days",ylab = "intinsity in m/d",main = "Storm event in one day")
+     lwd = 2, xlab = "days",ylab = "intensity in m/d",main = "Storm event in one day")
 grid()
 ```
 
@@ -1209,7 +1212,7 @@ As an example, `MRESULT()` is the max. discharge of the Hooge Raam at the weir.
 ```{r eval = TRUE}
 MRESULT = function(n)
 {
-  if(n == 1)#maximum discharge of the Hooge Raam at the weir
+  if(n == 1)#Maximum discharge of the Hooge Raam at the weir
   {
     max.discharge= max(HR.Q.trans$boundary_downstream)
     return(max.discharge)
@@ -1281,7 +1284,7 @@ As an example the following model parameters can be used for the analysis;
 <div class="question">
 Set up the base list for the aforementioned parameters. You may also choose different parameters right away.  
 ```{r eval = TRUE}
-base = list(GW.kD = GW.kD, C_ditch = C_ditch, H_drainage = H_drainage, C_surface = C_surface, H_surface = H_surface, GW.S = GW.S, HR.weir.crest = HR.weir.crest, HR.weir.width = HR.weir.width, HR.n = HR.n, HR.b = HR.b, HR.m = HR.m) # the list with the current model parameters
+base = list(GW.kD = GW.kD, C_ditch = C_ditch, H_drainage = H_drainage, C_surface = C_surface, H_surface = H_surface, GW.S = GW.S, HR.weir.crest = HR.weir.crest, HR.weir.width = HR.weir.width, HR.n = HR.n, HR.b = HR.b, HR.m = HR.m, Pattern.maximum.rate = Pattern.maximum.rate, Pattern.storm.length = Pattern.storm.length) # the list with the current model parameters
 str(base)# print the list for inspection
 ```
 </div>
@@ -1295,7 +1298,7 @@ str(base)# print the list for inspection
 <div class="question">
 Estimate the scale of variaton for the model parameters.  
 ```{r eval = TRUE}
-scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.6*C_ditch, H_drainage = 0.3, C_surface = 0.6*C_surface, H_surface = 0.3, GW.S = 0.4*GW.S, HR.weir.crest = 0.10, HR.weir.width = 0.05, HR.n = 0.25*HR.n, HR.b = 0.3, HR.m = 0.2*HR.m)#list of the scale of variation of the model parameters
+scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.6*C_ditch, H_drainage = 0.3, C_surface = 0.6*C_surface, H_surface = 0.3, GW.S = 0.4*GW.S, HR.weir.crest = 0.10, HR.weir.width = 0.05, HR.n = 0.25*HR.n, HR.b = 0.3, HR.m = 0.2*HR.m, Pattern.maximum.rate = 0.5*Pattern.maximum.rate, Pattern.storm.length = 1/24)#list of the scale of variation of the model parameters
 str(scale)#print the scales for inspection
 ```
 </div>
@@ -1306,18 +1309,17 @@ str(scale)#print the scales for inspection
 
 To determine the sensitivities the base data need to be saved;  
 ```{r eval=TRUE}
-for(i in range(1:5))
+
+M_base = c()
+for(i in (1:5))
 {
-  
+  M_base = c(M_base, MRESULT(i))
 }
-M_base = MRESULT(1)
-print(M_base)
+
 GW.state.base = GW.H.trans# a data.frame for the heads per time step of the groundwater model
 GW.flux.base = GW.Q.trans# a data.frame for the fluxes per time step of the groundwater model
 HR.state.base = HR.h.trans# a data.frame for the water levels of the Hooge Raam model
 HR.flux.base = HR.Q.trans# a dataa.frame for the fluxes per time step of the Hooge Raam model
-
-eps = 0.01 #1% of the original value hopefully avoiding rounding errors and still be in de proper local domain.
 ```
 
 ### Determine local parameter senitivities 
@@ -1358,6 +1360,10 @@ Sensitivity.loop = function()
     current.time = current.time + delt.t
     
     #Groundwater model run
+    P.pattern.rate <<- c(0.0008,Pattern.maximum.rate*(sin(pi*rep(1/24*(1:Pattern.storm.length)))),0.0008)
+    P.pattern.date <<- c(0,rep(1/24*(1:Pattern.storm.length)),((Pattern.storm.length+1)/24))
+    P.pattern <<- approxfun(P.pattern.date,P.pattern.rate,rule = 2)
+    
     P <<- P.pattern(current.time)  #should be a global variable, hence <<-, for the GW.trans model
     solve.steps(GW.trans)
     #  plot(GW.trans,fluxplot = T)
@@ -1445,7 +1451,7 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 #   1. Maximum discharge at the weir (MRESULT1)
 #   2. Maximum head of groundwater (MRESULT2)
 #   3. Maximum water height at Hooge Raam (MRESULT3)
-#   4. Drainage of the groundwater (MERSULT4)
+#   4. Maximum drainage of the groundwater (MERSULT4)
 #   5. Lag of maximum precipitation and the maximum head of groundwater or with max runoff (MRESULT5)
 
 # Input
@@ -1466,7 +1472,7 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 
 names = names(base)
 
-varRes = data.frame(MRESULT1 = numeric())
+varRes = data.frame()
 for(i in (1:length(base)))
 {
   base.current = as.numeric(base[i]) #base value of parameter[i]
@@ -1476,32 +1482,27 @@ for(i in (1:length(base)))
   name = names[i] #variables that we want to change
   
   assign(name, base.current+eps, envir = .GlobalEnv) #assigning name to base+eps
-  
-  # set.BC.fluxstate(HR.backwatermodel,where="right",HR.weir.BC)
-  # set.BC.fixedflux(HR.backwatermodel,where="left","HR.Qin")
-  # set.BC.fluxstate(GW.trans,where = "left",func = Ditch.bc)
-  # set.BC.fluxstate(GW.trans,where = "right",func = Ditch.bc)
-  # print(get(name, envir = .GlobalEnv))
-  
+
   Sensitivity.loop() #running the coupling model
   
   assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
   
   ans <- c() #The size MRESULT, how many variables of interest we have
-  for(j in (1:1))
+  for(j in (1:5))
   {
-    slope = (MRESULT(j)-M_base)/eps
+    slope = (MRESULT(j)-M_base[j])/eps
     sd = slope*scale.current
     var = sd^2
     
     ans = c(ans, var)
   }
+  print(M_base)
   
   varRes = rbind(varRes, ans)
   
   print(ans)
 }
-
+colnames(varRes) <- c('var1', 'var2', 'var3', 'var4', 'var5')
 print(varRes)
 ```
 </div>
@@ -1525,11 +1526,8 @@ Determine the derived uncertainty based on the aforementioned list
 ```{r eval = FALSE}
 
 #a table for some results "relvarM" contains the relative variances of MRESULT
-knitr::kable(as.data.frame(relvarM)*100, caption = "percentage local sensitivities",align="c")
+knitr::kable(as.data.frame(varRes)*100, caption = "percentage local sensitivities",align="c")
 
 ```
 
 </div>
-
-1.0095225
-
