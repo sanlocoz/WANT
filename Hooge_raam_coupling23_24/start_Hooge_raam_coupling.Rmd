@@ -1414,7 +1414,7 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 
 names = names(base)
 
-for(i in (1:length(base)))
+for(i in (6:8))#(1:length(base)))
 {
   base.current = as.numeric(base[i]) #base value of parameter[i]
   scale.current = as.numeric(scale[i]) #scale of variation in terms of standard deviation of parameter[i]
@@ -1423,6 +1423,7 @@ for(i in (1:length(base)))
   name = names[i] #variables that we want to change
   
   assign(name, base.current+eps, envir = .GlobalEnv) #assigning name to base+eps
+  set.BC.fluxstate(HR.backwatermodel,"right",HR.weir.BC)
   Sensitivity.loop() #running the coupling model
   assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
   #print(get(name, envir = .GlobalEnv))
