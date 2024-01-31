@@ -1414,17 +1414,27 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 
 names = names(base)
 
-for(i in (1:length(base)))
+for(i in (10:length(base)))
 {
   base.current = as.numeric(base[i]) #base value of parameter[i]
   scale.current = as.numeric(scale[i]) #scale of variation in terms of standard deviation of parameter[i]
-  eps = 1/100*scale.current #we take epsilon as 1% of the scale of variation (standard deviation)
+  eps = scale.current #we take epsilon as 1% of the scale of variation (standard deviation)
   
   name = names[i] #variables that we want to change
   
   assign(name, base.current+eps, envir = .GlobalEnv) #assigning name to base+eps
+  
+  set.BC.fluxstate(HR.backwatermodel,where="right",HR.weir.BC)
+  
+  
+  set.BC.fixedflux(HR.backwatermodel,where="left","HR.Qin")
+  set.BC.fluxstate(GW.trans,where = "left",func = Ditch.bc)
+  set.BC.fluxstate(GW.trans,where = "right",func = Ditch.bc)
+  print(get(name, envir = .GlobalEnv))
+  
   Sensitivity.loop() #running the coupling model
   assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
+  print(get(name, envir = .GlobalEnv))
   #print(get(name, envir = .GlobalEnv))
   print(MRESULT())
 
