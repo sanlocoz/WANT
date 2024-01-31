@@ -1247,7 +1247,7 @@ str(base)# print the list for inspection
 <div class="question">
 Estimate the scale of variaton for the model parameters.  
 ```{r eval = TRUE}
-scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.7*C_ditch, H_drainage = H_drainage, C_surface = C_surface, H_surface = H_surface, GW.S = GW.S, HR.weir.crest = HR.weir.crest, HR.weir.width = HR.weir.width, HR.n = HR.n, HR.b = 0.3, HR.m = HR.m)#list of the scale of variation of the model parameters
+scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.6*C_ditch, H_drainage = 0.3, C_surface = 0.6*C_surface, H_surface = 0.3, GW.S = 0.4*GW.S, HR.weir.crest = 0.10, HR.weir.width = 0.05, HR.n = 0.25*HR.n, HR.b = 0.3, HR.m = 0.2*HR.m)#list of the scale of variation of the model parameters
 str(scale)#print the scales for inspection
 ```
 </div>
@@ -1388,7 +1388,7 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 
 **TIP**: you can use `eps` being an offset so, $P_i = P_i + eps$ or use it as a fraction: $P_i = P_i*(1 + eps)$
 
-```{r eval = TRUE}
+```{r eval = TRUE} 
 # Output of interest:
 #   1. Maximum discharge at the weir (MRESULT1)
 #   2. Maximum head of groundwater (MRESULT2)
