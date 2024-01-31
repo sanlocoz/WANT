@@ -1207,11 +1207,31 @@ All results are stored in the following "containers" which are all simple data f
 As an example, `MRESULT()` is the max. discharge of the Hooge Raam at the weir.  
 
 ```{r eval = TRUE}
-MRESULT = function()
+MRESULT = function(n)
 {
- max.discharge= max(HR.Q.trans$boundary_downstream)
- return(max.discharge)
+  if(n == 1)#maximum discharge of the Hooge Raam at the weir
+  {
+    max.discharge= max(HR.Q.trans$boundary_downstream)
+    return(max.discharge)
+  }
+  else(n == 2)#Head of groundwater
+  {
+    
+  }
+  else(n == 3)#Drainage Max water height at Hooge Raam
+  {
+    
+  }
+  else(n == 4) #Drainage of the groundwater
+  {
+    
+  }
+  else(n == 5) #Lag of maximum precipitation and the maximum head of groundwater
+  {
+    
+  }
 }
+
 ```
 </div>
 
@@ -1414,31 +1434,43 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 
 names = names(base)
 
-for(i in (10:length(base)))
+varRes = data.frame(MRESULT1 = numeric())
+for(i in (1:length(base)))
 {
   base.current = as.numeric(base[i]) #base value of parameter[i]
   scale.current = as.numeric(scale[i]) #scale of variation in terms of standard deviation of parameter[i]
-  eps = scale.current #we take epsilon as 1% of the scale of variation (standard deviation)
+  eps = scale.current*0.01 #we take epsilon as 1% of the scale of variation (standard deviation)
   
   name = names[i] #variables that we want to change
   
   assign(name, base.current+eps, envir = .GlobalEnv) #assigning name to base+eps
   
-  set.BC.fluxstate(HR.backwatermodel,where="right",HR.weir.BC)
-  
-  
-  set.BC.fixedflux(HR.backwatermodel,where="left","HR.Qin")
-  set.BC.fluxstate(GW.trans,where = "left",func = Ditch.bc)
-  set.BC.fluxstate(GW.trans,where = "right",func = Ditch.bc)
-  print(get(name, envir = .GlobalEnv))
+  # set.BC.fluxstate(HR.backwatermodel,where="right",HR.weir.BC)
+  # set.BC.fixedflux(HR.backwatermodel,where="left","HR.Qin")
+  # set.BC.fluxstate(GW.trans,where = "left",func = Ditch.bc)
+  # set.BC.fluxstate(GW.trans,where = "right",func = Ditch.bc)
+  # print(get(name, envir = .GlobalEnv))
   
   Sensitivity.loop() #running the coupling model
+  
   assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
-  print(get(name, envir = .GlobalEnv))
-  #print(get(name, envir = .GlobalEnv))
-  print(MRESULT())
-
+  
+  ans <- c() #The size MRESULT, how many variables of interest we have
+  for(j in (1:5))
+  {
+    slope = (MRESULT(j)-M_base)/eps
+    sd = slope*scale.current
+    var = sd^2
+    
+    ans = c(ans, var)
+  }
+  
+  varRes = rbind(varRes, ans)
+  
+  print(ans)
 }
+
+print(varRes)
 ```
 </div>
 
