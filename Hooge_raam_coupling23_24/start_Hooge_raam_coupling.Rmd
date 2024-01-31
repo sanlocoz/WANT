@@ -1214,19 +1214,19 @@ MRESULT = function(n)
     max.discharge= max(HR.Q.trans$boundary_downstream)
     return(max.discharge)
   }
-  else(n == 2)#Head of groundwater
+  else if (n == 2)#Head of groundwater
   {
     
   }
-  else(n == 3)#Drainage Max water height at Hooge Raam
+  else if (n == 3)#Drainage Max water height at Hooge Raam
   {
     
   }
-  else(n == 4) #Drainage of the groundwater
+  else if (n == 4) #Drainage of the groundwater
   {
     
   }
-  else(n == 5) #Lag of maximum precipitation and the maximum head of groundwater
+  else if(n == 5) #Lag of maximum precipitation and the maximum head of groundwater
   {
     
   }
@@ -1278,7 +1278,7 @@ str(scale)#print the scales for inspection
 
 To determine the sensitivities the base data need to be saved;  
 ```{r eval=TRUE}
-M_base = MRESULT()
+M_base = MRESULT(1)
 print(M_base)
 GW.state.base = GW.H.trans# a data.frame for the heads per time step of the groundwater model
 GW.flux.base = GW.Q.trans# a data.frame for the fluxes per time step of the groundwater model
@@ -1456,7 +1456,7 @@ for(i in (1:length(base)))
   assign(name, base.current, envir = .GlobalEnv) #changing variables back to base
   
   ans <- c() #The size MRESULT, how many variables of interest we have
-  for(j in (1:5))
+  for(j in (1:1))
   {
     slope = (MRESULT(j)-M_base)/eps
     sd = slope*scale.current
