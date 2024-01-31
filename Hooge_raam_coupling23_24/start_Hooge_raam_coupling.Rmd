@@ -1214,21 +1214,48 @@ MRESULT = function(n)
     max.discharge= max(HR.Q.trans$boundary_downstream)
     return(max.discharge)
   }
-  else if (n == 2)#Head of groundwater
+  else if(n == 2)#Head of groundwater
   {
-    
+    max.head= max(GW.H.trans)
+    return(GW.H.trans)
   }
-  else if (n == 3)#Drainage Max water height at Hooge Raam
+  else if(n == 3)#Max water height at Hooge Raam
   {
-    
+    max.height= max(HR.h.trans$X50)
+    return(max.height)
   }
-  else if (n == 4) #Drainage of the groundwater
+  else if(n == 4) #Drainage of the groundwater
   {
-    
+    max.drain.HR= max(GW.Q.trans$boundary)
+    return(max.drain.HR)
   }
   else if(n == 5) #Lag of maximum precipitation and the maximum head of groundwater
   {
+    maximum_head = max(GW.H.trans)
+    eps = 10^-7
+    index = c(0,0)
+    for(i in (1:length(GW.H.trans)))
+    {
+      for(j in (1:length(GW.H.trans[,i])))
+      {
+        if(abs(maximum_head - GW.H.trans[j,i])<eps) #compare if GW.H.trans now == what we search
+        {
+          index = c(i,j) # i is column, j is row, if it is equal take the index
+        }
+      }
+    }
     
+    maximum_precipitation = max(GW.Q.trans$precip)
+    indexp = c(0,0)
+    for(i in (1:length(GW.Q.trans$precip)))
+    {
+        if(abs(maximum_precipitation - GW.Q.trans$precip[i])<eps) #compare if GW.Q.trans now == what we search
+        {
+          indexp = c(i) # if it is equal take the index
+        }
+    }
+    
+    return((index[2]-indexp)*delt.t)
   }
 }
 
