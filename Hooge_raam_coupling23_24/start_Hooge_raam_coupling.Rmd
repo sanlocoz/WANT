@@ -314,7 +314,7 @@ HR.weir.width = 2.25  #m width of the weir floor
 HR.weir.crest = 1 #m above bottom river
 # draw weir in cross section
 plot(c(-rev(widthrange/2),widthrange/2),c(rev(arange),arange),
-     xlab="y",ylab="a",main="cross section",type="l",lwd=5,col="brown")
+     xlab="y (m)",ylab="a (m)",main="cross section",type="l",lwd=5,col="brown")
 lines(c(-HR.weir.width/2,-HR.weir.width/2,HR.weir.width/2,HR.weir.width/2),
       c(max(arange),HR.weir.crest,HR.weir.crest,max(arange))
       ,col="blue",lwd=3)
@@ -1233,7 +1233,7 @@ As an example the following model parameters can be used for the analysis;
 <div class="question">
 Set up the base list for the aforementioned parameters. You may also choose different parameters right away.  
 ```{r eval = TRUE}
-base = list(GW.kD = GW.kD, C_ditch = C_ditch) # the list with the current model parameters
+base = list(GW.kD = GW.kD, C_ditch = C_ditch, H_drainage = H_drainage, C_surface = C_surface, H_surface = H_surface, GW.S = GW.S, HR.weir.crest = HR.weir.crest, HR.weir.width = HR.weir.width, HR.n = HR.n, HR.b = HR.b, HR.m = HR.m) # the list with the current model parameters
 str(base)# print the list for inspection
 ```
 </div>
@@ -1247,7 +1247,7 @@ str(base)# print the list for inspection
 <div class="question">
 Estimate the scale of variaton for the model parameters.  
 ```{r eval = TRUE}
-scale = list(GW.kD = 0.1*GW.kD, C_ditch = 0.1*C_ditch)#list of the scale of variation of the model parameters
+scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.7*C_ditch, H_drainage = H_drainage, C_surface = C_surface, H_surface = H_surface, GW.S = GW.S, HR.weir.crest = HR.weir.crest, HR.weir.width = HR.weir.width, HR.n = HR.n, HR.b = 0.3, HR.m = HR.m)#list of the scale of variation of the model parameters
 str(scale)#print the scales for inspection
 ```
 </div>
@@ -1406,12 +1406,11 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 # 6. Storage coefficient; GW.S
 # 
 # open water model:
-# 1. value weir constant (currently 1.83)
-# 2. Weir crest height HR.weir.crest
-# 3. Weir width HR.weir.width
-# 4. Manning coefficient HR.n
-# 5. River width HR.b
-# 6. Side slopes HR.m
+# 1. Weir crest height HR.weir.crest
+# 2. Weir width HR.weir.width
+# 3. Manning coefficient HR.n
+# 4. River width HR.b
+# 5. Side slopes HR.m
 
 names = names(base)
 
