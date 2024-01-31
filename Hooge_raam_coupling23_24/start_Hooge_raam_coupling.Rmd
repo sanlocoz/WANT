@@ -1214,17 +1214,17 @@ MRESULT = function(n)
     max.discharge= max(HR.Q.trans$boundary_downstream)
     return(max.discharge)
   }
-  else if(n == 2)#Head of groundwater
+  else if(n == 2)#Max head of groundwater
   {
     max.head= max(GW.H.trans)
-    return(GW.H.trans)
+    return(max.head)
   }
   else if(n == 3)#Max water height at Hooge Raam
   {
     max.height= max(HR.h.trans$X50)
     return(max.height)
   }
-  else if(n == 4) #Drainage of the groundwater
+  else if(n == 4) #Max drainage of the groundwater
   {
     max.drain.HR= max(GW.Q.trans$boundary)
     return(max.drain.HR)
@@ -1234,9 +1234,10 @@ MRESULT = function(n)
     maximum_head = max(GW.H.trans)
     eps = 10^-7
     index = c(0,0)
-    for(i in (1:length(GW.H.trans)))
+    dimension = dim(GW.H.trans)
+    for(i in (1:dim(GW.H.trans)[2]))
     {
-      for(j in (1:length(GW.H.trans[,i])))
+      for(j in (1:dim(GW.H.trans)[1]))
       {
         if(abs(maximum_head - GW.H.trans[j,i])<eps) #compare if GW.H.trans now == what we search
         {
