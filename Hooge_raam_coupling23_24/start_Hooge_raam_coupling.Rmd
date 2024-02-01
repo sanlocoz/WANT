@@ -1546,7 +1546,7 @@ for(i in (2:6))
 knitr::kable(as.data.frame(relVarM), caption = "Ratio of relative variances",align="c")
 knitr::kable(as.data.frame(varRes), caption = "Variance per parameter for each MRESULT",align="c")
 knitr::kable(cbind(nameResult,as.data.frame(M_base)), caption = "MBASE",align="c")
-knitr::kable(cbind(nameResult,as.data.frame(varMtot)), caption = "MBASE",align="c")
+knitr::kable(cbind(nameResult,as.data.frame(varMtot)), caption = "Total Variance",align="c")
 
 unit = function(i)
 {
