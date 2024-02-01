@@ -1537,15 +1537,16 @@ Determine the derived uncertainty based on the aforementioned list
 
 nameResult = c("MRESULT1","MRESULT2","MRESULT3","MRESULT4","MRESULT5")
 
-knitr::kable(as.data.frame(relVarM), caption = "Ratio of relative variances",align="c")
-knitr::kable(as.data.frame(varRes), caption = "Variance per parameter for each MRESULT",align="c")
-knitr::kable(cbind(nameResult,as.data.frame(M_base)), caption = "MBASE",align="c")
-
 varMtot = c() #Total Variance of MRESULT1 - MRESULT5
 for(i in (2:6))
 {
   varMtot = c(varMtot, sum(varRes[,i]))
 }
+
+knitr::kable(as.data.frame(relVarM), caption = "Ratio of relative variances",align="c")
+knitr::kable(as.data.frame(varRes), caption = "Variance per parameter for each MRESULT",align="c")
+knitr::kable(cbind(nameResult,as.data.frame(M_base)), caption = "MBASE",align="c")
+knitr::kable(cbind(nameResult,as.data.frame(varMtot)), caption = "MBASE",align="c")
 
 unit = function(i)
 {
@@ -1571,10 +1572,6 @@ for(i in (1:4))
     main=paste("Standard deviation of M",i,"=",round(sqrt(varMtot[i]),4), unit(i)),
     col = rainbow(length(relVarM)))
 }
-
-
-
-
 ```
 
 </div>
