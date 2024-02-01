@@ -145,7 +145,7 @@ The next chunk creates a plot of the cross section
 arange=seq(0,1.5,length=100) # large enough of possible depth values 
 widthrange = HR.width(arange)
 plot(c(-rev(widthrange/2),widthrange/2),c(rev(arange),arange),
-     xlab="y",ylab="a",main="cross section",type="l",lwd=5,col="brown")
+     xlab="y (m)",ylab="a (m)",main="cross section",type="l",lwd=5,col="brown")
 grid(col="black")
 ```
 
@@ -181,7 +181,7 @@ vel = 0.50 #m/s velocity for coarse sand
 Qrange = vel*Arange
 plot(Qrange,arange,
      main="Hooge Raam Q-a relation for fixed velocity v",
-     xlab="Q (m^3/s)",ylab="a (m)",col="brown",lwd=3,type="l")
+     xlab=expression(Q~(m^3/s)),ylab="a (m)",col="brown",lwd=3,type="l")
 legend("bottomright", inset=.05, title="v (m/s)",
        c("0.5"), col=c("brown"),lwd=3,horiz=TRUE)
 grid(col="black")
@@ -254,7 +254,7 @@ HR.Qequi = function(a)
 Qequirange = HR.Qequi(arange)
 plot(Qequirange,arange,
      main="Hooge Raam Q-a equilibrium",
-     xlab="Qequi",ylab="a",lwd=3,col="blue",type="l")
+     xlab=expression(Qequi~(m^3/s)),ylab="a (m)",lwd=3,col="blue",type="l")
 grid(col="black")
 ```
 
@@ -340,10 +340,8 @@ HR.weirQ = function(a)
 
 weirQrange = HR.weirQ(arange)
 
-## MAKE THE PLOT NICER BY ADJUSTING XLIM YLIM AND LEGEND
-
 plot(Qequirange,arange,main="Qequi (without weir) and Qweir for HoogeRaam",
-     xlab="Qequi",ylab="a",lwd=3,col="blue",type="l", ylim = c(0,1.5))
+     xlab=expression(Qequi~(m^3/s)),ylab="a (m)",lwd=3,col="blue",type="l", ylim = c(0,1.5))
 lines(weirQrange,arange,lwd=3,col="red")
 legend("bottomright", inset=.05,
        c("Qequiriver","Qweir"), col=c("blue","red"),lwd=3,horiz=FALSE)
@@ -567,7 +565,7 @@ HR.states.2 = dataframe.states(HR.backwatermodel)
 nodes = HR.states.2$x
 
 plot(nodes,HR.zb(nodes),col="brown",type="l",lwd=4,ylim=c(9,16),
-     xlab="l",ylab="h",main=paste("backwater + lateral flow Hooge Raam"))
+     xlab="l (m)",ylab="h (m)",main=paste("backwater + lateral flow Hooge Raam"))
 lines(HR.states.1,col="orange",lwd=3)
 lines(HR.states.2,col="blue",lwd=3)
 grid(col="black")
@@ -1298,7 +1296,7 @@ str(base)# print the list for inspection
 <div class="question">
 Estimate the scale of variaton for the model parameters.  
 ```{r eval = TRUE}
-scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.6*C_ditch, H_drainage = 0.3, C_surface = 0.6*C_surface, H_surface = 0.3, GW.S = 0.4*GW.S, HR.weir.crest = 0.10, HR.weir.width = 0.05, HR.n = 0.25*HR.n, HR.b = 0.3, HR.m = 0.2*HR.m, Pattern.maximum.rate = 0.5*Pattern.maximum.rate, Pattern.storm.length = 1/24)#list of the scale of variation of the model parameters
+scale = list(GW.kD = 0.5*GW.kD, C_ditch = 0.6*C_ditch, H_drainage = 0.3, C_surface = 0.6*C_surface, H_surface = 0.3, GW.S = 0.4*GW.S, HR.weir.crest = 0.10, HR.weir.width = 0.05, HR.n = 0.25*HR.n, HR.b = 0.3, HR.m = 0.2*HR.m, Pattern.maximum.rate = 0.1*Pattern.maximum.rate, Pattern.storm.length = 1/24)#list of the scale of variation of the model parameters
 str(scale)#print the scales for inspection
 ```
 </div>
@@ -1469,12 +1467,17 @@ Set up the sensitivity sequence, see above, to determine the local sensitivities
 # 3. Manning coefficient HR.n
 # 4. River width HR.b
 # 5. Side slopes HR.m
+# 
+# external fluxes:
+# 1. Maximum storm rate Pattern.maximum.rate
+# 2. Length of the storm Pattern.storm.length: num 24
 
 names = names(base)
 
 varRes = data.frame()
 for(i in (1:length(base)))
 {
+  print(paste("Still working at", i, "/",length(base)))
   base.current = as.numeric(base[i]) #base value of parameter[i]
   scale.current = as.numeric(scale[i]) #scale of variation in terms of standard deviation of parameter[i]
   eps = scale.current*0.01 #we take epsilon as 1% of the scale of variation (standard deviation)
@@ -1495,15 +1498,15 @@ for(i in (1:length(base)))
     var = sd^2
     
     ans = c(ans, var)
+  
   }
-  print(M_base)
-  
   varRes = rbind(varRes, ans)
-  
-  print(ans)
 }
-colnames(varRes) <- c('var1', 'var2', 'var3', 'var4', 'var5')
-print(varRes)
+colnames(varRes) <- c('MRESULT1', 'MRESULT2', 'MRESULT3', 'MRESULT4', 'MRESULT5')
+relVarM = sweep(varRes,2,colSums(varRes),`/`)
+
+varRes = cbind(names, varRes)
+relVarM = cbind(names, relVarM)
 ```
 </div>
 
@@ -1523,10 +1526,54 @@ Recall the previous Local Sensitivity Assignment where you calculated the:
 <div class="question">
 Determine the derived uncertainty based on the aforementioned list
 
-```{r eval = FALSE}
+```{r eval = TRUE}
 
-#a table for some results "relvarM" contains the relative variances of MRESULT
-knitr::kable(as.data.frame(varRes)*100, caption = "percentage local sensitivities",align="c")
+# Output of interest:
+#   1. Maximum discharge at the weir (MRESULT1), m3/s
+#   2. Maximum head of groundwater (MRESULT2), m
+#   3. Maximum water height at Hooge Raam (MRESULT3), m
+#   4. Maximum drainage of the groundwater (MERSULT4), m2/d
+#   5. Lag of maximum precipitation and the maximum head of groundwater or with max runoff (MRESULT5), day
+
+nameResult = c("MRESULT1","MRESULT2","MRESULT3","MRESULT4","MRESULT5")
+
+knitr::kable(as.data.frame(relVarM), caption = "Ratio of relative variances",align="c")
+knitr::kable(as.data.frame(varRes), caption = "Variance per parameter for each MRESULT",align="c")
+knitr::kable(cbind(nameResult,as.data.frame(M_base)), caption = "MBASE",align="c")
+
+varMtot = c() #Total Variance of MRESULT1 - MRESULT5
+for(i in (2:6))
+{
+  varMtot = c(varMtot, sum(varRes[,i]))
+}
+
+unit = function(i)
+{
+  if(i==1)
+  {
+    return("m3/s")
+  }
+  else if(i==4)
+  {
+    return("m2/d")
+  }
+  else if(i==2 | i==3)
+  {
+    return("m")
+  }
+}
+
+for(i in (1:4))
+{
+  data = relVarM[,i+1]
+  labels = relVarM[,1]
+  pie(data,labels=labels,
+    main=paste("Standard deviation of M",i,"=",round(sqrt(varMtot[i]),4), unit(i)),
+    col = rainbow(length(relVarM)))
+}
+
+
+
 
 ```
 
